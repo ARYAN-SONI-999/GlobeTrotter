@@ -1,0 +1,20 @@
+{
+  "name": "GlobeTrotter — Smart AI Tourism & Trip Planner",
+  "short_name": "GlobeTrotter",
+  "description": "AI-powered smart tourism & itinerary planning platform for India and beyond.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%8D</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "lifestyle", "navigation"],
+  "lang": "en-IN"
+}

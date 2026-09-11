@@ -1,0 +1,54 @@
+# Render Infrastructure as Code Blueprint for GlobeTrotter
+# Automatically deploys the Express Backend Web Service, Vite Frontend Static Site, and Managed PostgreSQL database.
+
+services:
+  # ── 1. Backend Web Service ───────────────────────────────────────────────────
+  - type: web
+    name: globetrotter-backend
+    runtime: node
+    rootDir: globetrotter/backend
+    buildCommand: npm install
+    startCommand: npm run seed && node server.js
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: "*"
+      # Optional Production API Keys (Set in Render Dashboard if available)
+      - key: MAPBOX_ACCESS_TOKEN
+        sync: false
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: EXCHANGERATE_API_KEY
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+  # ── 2. Frontend Static Site ─────────────────────────────────────────────────
+  - type: web
+    name: globetrotter-frontend
+    runtime: static
+    rootDir: globetrotter/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    plan: free
+    region: oregon
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          name: globetrotter-backend
+          type: web
+          property: host
