@@ -1,7 +1,7 @@
 const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const db = require('../db');
-const authMiddleware = require('../middleware/authMiddleware');
+const { authMiddleware } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -107,7 +107,7 @@ router.post('/', async (req, res) => {
  */
 router.get('/my-bookings', authMiddleware, (req, res) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.userId || req.user?.id;
     const bookings = db.prepare('SELECT * FROM bookings WHERE user_id = ? ORDER BY created_at DESC').all(userId);
     return res.json(bookings);
   } catch (err) {

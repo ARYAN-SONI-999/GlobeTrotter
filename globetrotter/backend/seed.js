@@ -532,10 +532,15 @@ async function run() {
 }
 
 if (require.main === module) {
-  run().catch((err) => {
-    console.error('Seed error:', err);
-    process.exit(1);
-  });
+  run()
+    .then(() => {
+      console.log('Seed process exited cleanly.');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error('Seed error:', err);
+      process.exit(1);
+    });
 }
 
 module.exports = { seedDatabase: run };

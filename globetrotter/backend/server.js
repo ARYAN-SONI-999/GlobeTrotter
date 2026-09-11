@@ -136,7 +136,7 @@ db.init()
       console.warn('Auto-seed check note:', seedErr.message);
     }
 
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`GlobeTrotter API listening on port ${PORT} (CORS origin: ${process.env.CORS_ORIGIN || 'localhost:5173'})`);
     });
   })

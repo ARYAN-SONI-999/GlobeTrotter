@@ -24,4 +24,7 @@ function authMiddleware(req, res, next) {
   }
 }
 
-module.exports = { authMiddleware, JWT_SECRET };
+authMiddleware.authMiddleware = authMiddleware;
+authMiddleware.JWT_SECRET = JWT_SECRET;
+
+module.exports = authMiddleware;
