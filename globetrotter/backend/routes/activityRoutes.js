@@ -18,31 +18,36 @@ function assertStopOwnership(stopId, userId) {
 router.get(['/templates', '/activities/templates', '/activities'], (req, res) => {
   try {
     const { type, maxCost, maxDuration, search, cityId } = req.query;
-    let sql = 'SELECT * FROM activities WHERE is_template = 1';
+    let sql = `
+      SELECT activities.*, cities.name as cityName, cities.country as cityCountry 
+      FROM activities 
+      LEFT JOIN cities ON activities.city_id = cities.id 
+      WHERE activities.is_template = 1
+    `;
     const params = [];
 
     if (type) {
-      sql += ' AND LOWER(type) = ?';
+      sql += ' AND LOWER(activities.type) = ?';
       params.push(type.toLowerCase());
     }
     if (maxCost) {
-      sql += ' AND cost <= ?';
+      sql += ' AND activities.cost <= ?';
       params.push(Number(maxCost));
     }
     if (maxDuration) {
-      sql += ' AND duration <= ?';
+      sql += ' AND activities.duration <= ?';
       params.push(Number(maxDuration));
     }
     if (search) {
-      sql += ' AND (LOWER(name) LIKE ? OR LOWER(description) LIKE ?)';
+      sql += ' AND (LOWER(activities.name) LIKE ? OR LOWER(activities.description) LIKE ? OR LOWER(COALESCE(cities.name, "")) LIKE ?)';
       const q = `%${search.toLowerCase()}%`;
-      params.push(q, q);
+      params.push(q, q, q);
     }
     if (cityId) {
-      sql += ' AND city_id = ?';
+      sql += ' AND activities.city_id = ?';
       params.push(cityId);
     }
-    sql += ' ORDER BY name ASC';
+    sql += ' ORDER BY activities.cost DESC, activities.name ASC';
     const rows = db.prepare(sql).all(...params);
     return res.json(rows.map(mapActivity));
   } catch (err) {

@@ -597,6 +597,14 @@ a:hover { color: var(--primary-hover); }
 .city-chip-info span { font-size: 0.78rem; color: var(--text-muted); }
 .city-chip-popularity { font-size: 0.8rem; font-weight: 600; color: #ea580c; background: #ffedd5; padding: 2px 8px; border-radius: var(--radius-full); }
 
+/* Dashboard Utility Tools Grid (Currency Converter & Live Weather) */
+.dashboard-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
 /* Trip Cards Grid (My Trips / Community) */
 .trip-grid {
   display: grid;
@@ -693,6 +701,20 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
 .form-row > div { flex: 1; }
 .form-error { color: var(--danger); font-size: 0.88rem; margin-top: 10px; font-weight: 500; }
 .form-success { color: var(--success); font-size: 0.9rem; margin: 10px 0; font-weight: 600; }
+
+/* Filter & Search Controls Bar */
+.search-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-controls input,
+.search-controls select {
+  flex: 1;
+  min-width: 140px;
+}
 
 .card-form {
   background: white;
@@ -1092,9 +1114,6 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
 }
 
 @media (max-width: 768px) {
-  .navbar { flex-direction: column; align-items: stretch; gap: 12px; }
-  .navbar-links { overflow-x: auto; padding: 6px; }
-  .navbar-right { justify-content: space-between; }
   .dashboard-hero { padding: 28px 20px; }
   .hero-content h1 { font-size: 1.7rem; }
   .form-row { flex-direction: column; gap: 0; }
@@ -3246,7 +3265,7 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    height: 62px !important;
+    height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
     background: rgba(255, 255, 255, 0.96) !important;
     backdrop-filter: blur(16px) !important;
     border-top: 1px solid #e2e8f0 !important;
@@ -3254,7 +3273,7 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
     justify-content: space-around !important;
     align-items: center !important;
     z-index: 9999 !important;
-    padding: 4px 6px !important;
+    padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   .mobile-nav-item {
@@ -3291,7 +3310,7 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
 
   /* Page layout padding for mobile bottom bar */
   .page-container {
-    padding: 14px 12px 85px !important;
+    padding: 14px 12px calc(85px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
   /* Mobile Typography */
@@ -3418,7 +3437,6 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
   }
 
   /* Mobile Image Display Fixes & Aspect Ratio Safeguards */
-  img,
   .place-card-image,
   .activity-card-img,
   .trip-card-cover,
@@ -4359,5 +4377,97 @@ form input:disabled { background: #f8fafc; color: var(--text-muted); }
 
   .auth-page {
     padding: 12px !important;
+  }
+
+  /* Dashboard Tools Grid */
+  .dashboard-tools-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Activity Search & Filter Controls */
+  .search-controls input,
+  .search-controls select,
+  .search-controls button {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Itinerary & Day Timeline on Mobile */
+  .active-day-card {
+    padding: 18px 14px !important;
+  }
+
+  .timeline-slot-indicator {
+    padding: 8px 12px !important;
+  }
+
+  /* Table and wide cards responsive scrolling */
+  .table-responsive,
+  table {
+    display: block !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Ensure modal dialogue fits on small mobile devices */
+  .modal-overlay {
+    padding: 10px !important;
+    align-items: center !important;
+  }
+}
+
+/* Extra small mobile screen optimizations (< 480px) */
+@media (max-width: 480px) {
+  .dashboard-highlights {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .highlight-card {
+    padding: 12px 10px !important;
+  }
+
+  .highlight-number {
+    font-size: 1.15rem !important;
+  }
+
+  .highlight-label {
+    font-size: 0.72rem !important;
+  }
+
+  .hero-badge {
+    font-size: 0.72rem !important;
+  }
+
+  .mobile-nav-label {
+    font-size: 0.65rem !important;
+  }
+
+  .mobile-nav-icon {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Tablet & Landscape iPad adjustments (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-command-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .dashboard-highlights {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .navbar-search-input {
+    width: 150px !important;
+  }
+
+  .navbar-links .nav-link {
+    padding: 7px 10px !important;
+    font-size: 0.82rem !important;
   }
 }

@@ -63,6 +63,8 @@ function mapActivity(row) {
     id: row.id,
     stopId: row.stop_id,
     cityId: row.city_id,
+    cityName: row.cityName || row.city_name || '',
+    cityCountry: row.cityCountry || row.city_country || '',
     name: row.name,
     type: row.type,
     cost: row.cost,

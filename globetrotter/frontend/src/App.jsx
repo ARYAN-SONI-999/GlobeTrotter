@@ -7,7 +7,6 @@ import { OfflineProvider } from './context/OfflineContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import ErrorBoundary from './components/ErrorBoundary';
-import AICopilotDrawer from './components/AICopilotDrawer';
 import Footer from './components/Footer';
 
 // Lazy-loaded page components for fast initial load time
@@ -51,7 +50,6 @@ function Layout({ children }) {
           {children}
         </ErrorBoundary>
       </main>
-      <AICopilotDrawer />
       <Footer />
     </>
   );

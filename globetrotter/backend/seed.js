@@ -518,6 +518,78 @@ async function run() {
   });
   seedPlacesTxn();
 
+  // 3. Realistic Curated Activities Seeding
+  const CURATED_REALISTIC_ACTIVITIES = [
+    { city: 'Rishikesh', name: 'Shivpuri to Rishikesh 16km White Water River Rafting', type: 'Adventure', cost: 850, duration: 3.5, description: 'Conquer Class III & IV rapids (Roller Coaster, Golf Course) on the sacred Ganges with certified river guides, cliff jumping, and safety gear.', imageUrl: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?w=800&q=80' },
+    { city: 'Rishikesh', name: 'Triveni Ghat Evening Maha Ganga Aarti & Floating Diyas', type: 'Culture', cost: 0, duration: 2.0, description: 'Witness priests perform rhythmic fire aarti to Vedic chants as thousands of devotees release glowing leaf lamps into the evening river.', imageUrl: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&q=80' },
+    { city: 'Rishikesh', name: 'Neer Garh Hidden Jungle Waterfall Trek & Cold Plunge', type: 'Adventure', cost: 150, duration: 3.0, description: 'Trek across wooden footbridges through dense sub-tropical forests to pristine natural cascading limestone plunge pools.', imageUrl: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=800&q=80' },
+    { city: 'Goa', name: 'Grand Island Deep Sea Scuba Diving with Dolphin Sighting & BBQ', type: 'Adventure', cost: 2499, duration: 6.0, description: 'PADI-instructor guided dive exploring rich coral reefs and historic shipwrecks, boat cruise, underwater HD video, and fresh beach buffet.', imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80' },
+    { city: 'Goa', name: 'Mandovi River Sunset Luxury Catamaran Cruise & Goan Folk Music', type: 'Leisure', cost: 650, duration: 2.0, description: 'Sail through tranquil backwaters as the sun sets over the Arabian Sea, enjoying live Dekhni dance performances and chilled refreshments.', imageUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },
+    { city: 'Goa', name: 'Fontainhas Latin Quarter Heritage Photography & Fado Walk', type: 'Culture', cost: 450, duration: 2.5, description: 'Wander past 18th-century pastel Portuguese villas, tiled Azulejo nameplates, artisanal bakeries, and historic cobblestone lanes.', imageUrl: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=800&q=80' },
+    { city: 'Goa', name: 'Calangute & Baga Parasailing and Jet Ski Speed Run Combo', type: 'Adventure', cost: 1250, duration: 1.5, description: 'High-altitude sea parachute flight with thrilling dip into the waves followed by high-speed waverunner laps along the coast.', imageUrl: 'https://images.unsplash.com/photo-1533130061792-64b345e4a833?w=800&q=80' },
+    { city: 'Manali', name: 'Solang Valley High Tandem Paragliding Flight (Rohtang Vista)', type: 'Adventure', cost: 1850, duration: 2.0, description: 'Soar like an eagle above alpine cedar forests with licensed pilots and uninterrupted panoramic views of snow-capped Pir Panjal peaks.', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80' },
+    { city: 'Manali', name: 'Old Manali Trout Fishing, Wood-Fired Cafes & Riverside Walk', type: 'Food', cost: 600, duration: 3.0, description: 'Experience rustic village charm along the Beas River, sampling freshly caught Himalayan rainbow trout and wood-fired artisanal sourdough pizzas.', imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80' },
+    { city: 'Manali', name: 'Jogini Waterfall Pine Forest Nature Hike', type: 'Adventure', cost: 0, duration: 3.0, description: 'Scenic mountain trail passing through secluded apple orchards and sacred shrines to reach dramatic 150-foot cascading cliffs.', imageUrl: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80' },
+    { city: 'Jaipur', name: 'Amber Fort Heritage Night Safari & Maota Lake Sound & Light Show', type: 'Culture', cost: 450, duration: 2.5, description: 'Marvel at Rajput architectural grandeur illuminated against starry night skies with royal Hindi & English narration.', imageUrl: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=800&q=80' },
+    { city: 'Jaipur', name: 'Old Pink City Royal Heritage Street Food & Bazaars Walk', type: 'Food', cost: 550, duration: 3.0, description: 'Trek through Johari Bazaar for authentic Pyaaz Kachori, spiced Lassi at Lassiwala, Ghewar sweets, and block-print ateliers.', imageUrl: 'https://images.unsplash.com/photo-1585938389612-a552a28d6914?w=800&q=80' },
+    { city: 'Jaipur', name: 'Nahargarh Fort Sunset Jeep Drive & Padao Panoramic Rooftop', type: 'Leisure', cost: 300, duration: 2.0, description: 'Ascend the winding Aravalli ridge for a 360-degree vista of Jaipur twinkling city lights as dusk sets in.', imageUrl: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80' },
+    { city: 'Matheran', name: 'Heritage Forest Horseback Trail & Charlotte Lake Nature Trot', type: 'Adventure', cost: 500, duration: 2.5, description: 'Trot along vehicle-free red laterite paths under shady canopies to discover hidden forest lakes and rare birdlife.', imageUrl: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80' },
+    { city: 'Matheran', name: 'Panorama Point 360° Dawn Ridge Trek & Hot Cutting Chai', type: 'Sightseeing', cost: 0, duration: 3.0, description: 'Pre-dawn cliff walk to watch morning mist burn off the Sahyadri mountains with roasted corn and hot cutting chai.', imageUrl: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80' },
+    { city: 'Matheran', name: 'Artisanal Chikki & Chocolate Walnut Fudge Tasting at Mall Road', type: 'Food', cost: 250, duration: 1.5, description: 'Sample hand-rolled jaggery chikki varieties, Nariman fudges, and authentic Maharashtrian misal pav.', imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80' },
+    { city: 'Varanasi', name: 'Subah-e-Banaras Dawn Wooden Boat Row across Ancient Ghats', type: 'Culture', cost: 400, duration: 2.5, description: 'Watch the sun rise over the holy Ganges as priests chant mantras, bathers perform morning surya namaskar, and temple bells ring.', imageUrl: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?w=800&q=80' },
+    { city: 'Varanasi', name: 'Kashi Vishwanath Corridor & Godowlia Alleyways Chaat Safari', type: 'Food', cost: 350, duration: 2.0, description: 'Taste crispy Tamatar Chaat, Palak Patta Chaat, creamy seasonal Malaiyo foam, and authentic Banarasi Paan.', imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80' },
+    { city: 'Lonavala', name: 'Karla 2nd-Century Buddhist Rock-Cut Chaitya Caves Exploration', type: 'Culture', cost: 100, duration: 3.0, description: 'Climb stone steps to marvel at 2,000-year-old carved teakwood roof ribs, grand ashokan pillars, and monolithic stupas.', imageUrl: 'https://images.unsplash.com/photo-1605792657660-596af9009e82?w=800&q=80' },
+    { city: 'Lonavala', name: 'Tiger’s Leap & Lion’s Point High Ridge Sunset & Pakoda Picnic', type: 'Leisure', cost: 0, duration: 2.0, description: 'Perch atop 650-meter vertical cliff drop enjoying gusting monsoon winds and hot onion bhaji.', imageUrl: 'https://images.unsplash.com/photo-1582650625119-3a31f8418365?w=800&q=80' },
+    { city: 'Mahabaleshwar', name: 'Mapro Strawberry Farm Tour, Berry Picking & Chef Dessert Tasting', type: 'Food', cost: 350, duration: 2.5, description: 'Wander through fragrant berry bushes, sample fresh chocolate strawberry fondue, and enjoy wood-fired thin-crust pizza.', imageUrl: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800&q=80' },
+    { city: 'Mahabaleshwar', name: 'Venna Lake Sunset Shikara Paddle Boat & Pine Forest Walk', type: 'Leisure', cost: 450, duration: 2.0, description: 'Glaze across calm hill station waters surrounded by thick deodar and pine trees as twilight settles.', imageUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80' },
+    { city: 'Coorg', name: 'Rainforest Coffee Estate Plantation Walk & Cupping Workshop', type: 'Food', cost: 400, duration: 2.5, description: 'Learn harvesting of Arabica & Robusta beans, pepper vines, cardamom pods, followed by freshly roasted espresso tasting.', imageUrl: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80' },
+    { city: 'Coorg', name: 'Abbey Falls Roaring Spray Trek & Hanging Bridge Photo Spot', type: 'Adventure', cost: 80, duration: 2.0, description: 'Descent through dense spice groves to witness cascading river rapids over rocky basalt boulders.', imageUrl: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=800&q=80' },
+    { city: 'Darjeeling', name: 'Tiger Hill Mt. Kanchenjunga Golden Dawn 4x4 Jeep Safari', type: 'Sightseeing', cost: 600, duration: 3.5, description: 'Early 4:00 AM departure to witness the first rays of morning sun turn Himalayan mountain peaks into glistening pink gold.', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80' },
+    { city: 'Darjeeling', name: 'Happy Valley Organic Tea Estate Plucking & Factory Tasting', type: 'Culture', cost: 350, duration: 2.5, description: 'Walk terraced misty mountain slopes with estate pluckers and taste rare Muscatel first-flush teas.', imageUrl: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80' },
+    { city: 'Ooty', name: 'UNESCO Nilgiri Mountain Steam Toy Train Joyride (Coonoor Run)', type: 'Culture', cost: 250, duration: 3.0, description: 'Ride the century-old rack-and-pinion blue heritage locomotive crossing high viaduct bridges and deep tea ravines.', imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80' },
+    { city: 'Ooty', name: 'Government Botanical Gardens & Doddabetta Peak Lookout', type: 'Sightseeing', cost: 120, duration: 2.5, description: 'Explore 55 acres of exotic terraced flora and ascend to the highest Nilgiri viewpoint.', imageUrl: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80' },
+    { city: 'Dubai', name: 'Lahbab Red Dunes 4x4 Desert Safari, Sandboarding & Starlight BBQ', type: 'Adventure', cost: 3200, duration: 6.0, description: 'High-octane dune bashing, camel riding, falconry, Tanoura performance, and open-air grilled Arabic dinner feast.', imageUrl: 'https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?w=800&q=80' },
+    { city: 'Dubai', name: 'Burj Khalifa 124th Floor Sky Lounge & Dubai Fountain Spectacle', type: 'Sightseeing', cost: 4100, duration: 2.5, description: 'Ascend the world fastest double-decker elevator to enjoy panoramic skyscraper vistas and choreographed water music.', imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' },
+    { city: 'Paris', name: 'Seine River Sunset Glass-Canopy Dinner Cruise with Live Jazz', type: 'Leisure', cost: 4900, duration: 2.5, description: '3-course gourmet French dinner gliding past the illuminated Eiffel Tower, Louvre Museum, and Notre-Dame.', imageUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80' },
+    { city: 'Paris', name: 'Montmartre Bohemian Artists Square & Sacré-Cœur Walking Tour', type: 'Culture', cost: 1200, duration: 3.0, description: 'Wind through cobblestone alleys where Picasso and Van Gogh painted, ending with panoramic hilltop city views.', imageUrl: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80' },
+    { city: 'Tokyo', name: 'Tsukiji Outer Market Culinary Safari & Fresh Nigiri Masterclass', type: 'Food', cost: 3600, duration: 3.0, description: 'Navigate bustling street stalls sampling tamagoyaki, wagyu skewers, fresh sea urchin, and master sushi rolling techniques.', imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80' },
+    { city: 'Tokyo', name: 'Shinjuku & Shibuya Neon Nightlife & Cyberpunk Izakaya Crawl', type: 'Culture', cost: 2400, duration: 3.5, description: 'Explore atmospheric Omoide Yokocho lantern alleys, Golden Gai miniature bars, and futuristic neon streetscapes.', imageUrl: 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=800&q=80' },
+    { city: 'Udaipur', name: 'Lake Pichola Royal Sunset Boat Cruise & Jag Mandir Island', type: 'Leisure', cost: 750, duration: 2.0, description: 'Golden hour sail past City Palace marble facades and shimmering island palaces.', imageUrl: 'https://images.unsplash.com/photo-1615836245337-f5b9b2303f10?w=800&q=80' },
+    { city: 'Jodhpur', name: 'Mehrangarh Fort Flying Fox Aerial Zipline Tour (6 Zips)', type: 'Adventure', cost: 1650, duration: 2.5, description: 'Glide along six wire cables high above defensive battlements and moat lakes with royal fortress views.', imageUrl: 'https://images.unsplash.com/photo-1582650625119-3a31f8418365?w=800&q=80' },
+    { city: 'Jaisalmer', name: 'Sam Golden Sand Dunes Sunset Camel Safari & Folk Dance', type: 'Adventure', cost: 850, duration: 4.0, description: 'Ride gentle camels into golden Thar desert ripple dunes, followed by Kalbeliya folk fire dances and chai.', imageUrl: 'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=800&q=80' },
+    { city: 'Goa', name: 'Dudhsagar Waterfalls Jungle Jeep Safari & Spice Plantation', type: 'Adventure', cost: 1600, duration: 6.0, description: 'Cross streams in an open 4x4 through Bhagwan Mahavir Wildlife Sanctuary to India’s 5th tallest waterfall.', imageUrl: 'https://images.unsplash.com/photo-1582650625119-3a31f8418365?w=800&q=80' }
+  ];
+
+  // Remove old robotic templates
+  db.prepare("DELETE FROM activities WHERE is_template = 1 AND (name LIKE '%City Heritage Tour%' OR name LIKE '%Local Food Tasting Trail%' OR name LIKE '%Historical Monument Visit%' OR name LIKE '%Scenic Adventure Activity%' OR name LIKE '%Sunset Cruise & Viewpoint%')").run();
+
+  const seedCuratedActivitiesTxn = db.transaction(() => {
+    let count = 0;
+    const existingActs = new Set(db.prepare('SELECT LOWER(name) as name FROM activities WHERE is_template = 1').all().map((r) => r.name));
+    
+    CURATED_REALISTIC_ACTIVITIES.forEach((act) => {
+      if (!existingActs.has(act.name.toLowerCase())) {
+        const cityRow = db.prepare('SELECT id FROM cities WHERE LOWER(name) LIKE ?').get(`%${act.city.toLowerCase()}%`);
+        insertActivity.run(
+          uuidv4(),
+          cityRow ? cityRow.id : null,
+          act.name,
+          act.type,
+          act.cost,
+          act.duration,
+          act.description,
+          act.imageUrl
+        );
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      console.log(`Seeded ${count} realistic curated travel activities.`);
+    }
+  });
+  seedCuratedActivitiesTxn();
+
   const existingAdmin = db.prepare('SELECT id FROM users WHERE email = ?').get('admin@globetrotter.com');
   if (!existingAdmin) {
     db.prepare(`INSERT INTO users (id, name, email, password_hash, language, is_admin, created_at)

@@ -4,6 +4,7 @@ import AudioGuideButton from '../components/AudioGuideButton';
 import LandmarkVRViewer from '../components/LandmarkVRViewer';
 import MapView from '../components/MapView';
 import ErrorBoundary from '../components/ErrorBoundary';
+import TourBookingModal from '../components/TourBookingModal';
 
 function getThrillBadge(act) {
   const t = (act.type || '').toLowerCase();
@@ -73,6 +74,9 @@ export default function ActivitySearch() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showMapModal, setShowMapModal] = useState(false);
+  const [bookingActivityName, setBookingActivityName] = useState(null);
+  const [cityList, setCityList] = useState([]);
+  const [cityFilter, setCityFilter] = useState('');
 
   const [quickViewActivity, setQuickViewActivity] = useState(null);
 
@@ -125,7 +129,7 @@ export default function ActivitySearch() {
     );
   };
 
-  const loadActivities = async (q = search, t = type, cost = maxCost, dur = maxDuration) => {
+  const loadActivities = async (q = search, t = type, cost = maxCost, dur = maxDuration, cityId = cityFilter) => {
     setLoading(true);
     setError('');
     try {
@@ -134,6 +138,7 @@ export default function ActivitySearch() {
       if (t) params.set('type', t);
       if (cost) params.set('maxCost', cost);
       if (dur) params.set('maxDuration', dur);
+      if (cityId) params.set('cityId', cityId);
 
       const res = await api.get(`/activities/templates?${params.toString()}`);
       setActivities(res.data);
@@ -158,6 +163,7 @@ export default function ActivitySearch() {
   };
 
   useEffect(() => {
+    api.get('/cities').then(res => setCityList(res.data || [])).catch(() => {});
     loadActivities();
     loadUserTrips();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +178,7 @@ export default function ActivitySearch() {
 
   const handleFilter = (e) => {
     e.preventDefault();
-    loadActivities(search, type, maxCost, maxDuration);
+    loadActivities(search, type, maxCost, maxDuration, cityFilter);
   };
 
   const handleReset = () => {
@@ -180,8 +186,9 @@ export default function ActivitySearch() {
     setType('');
     setMaxCost('');
     setMaxDuration('');
+    setCityFilter('');
     setShowSavedOnly(false);
-    loadActivities('', '', '', '');
+    loadActivities('', '', '', '', '');
   };
 
   const fetchTripStops = async (tripId) => {
@@ -384,9 +391,22 @@ export default function ActivitySearch() {
           onChange={(e) => setSearch(e.target.value)}
           style={{ borderRadius: '14px', padding: '12px 18px', fontSize: '0.92rem' }}
         />
+        <select
+          value={cityFilter}
+          onChange={(e) => {
+            setCityFilter(e.target.value);
+            loadActivities(search, type, maxCost, maxDuration, e.target.value);
+          }}
+          style={{ borderRadius: '14px', padding: '12px 16px', minWidth: '160px' }}
+        >
+          <option value="">📍 All Destinations</option>
+          {cityList.map((c) => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
         <select value={type} onChange={(e) => setType(e.target.value)} style={{ borderRadius: '14px', padding: '12px 16px' }}>
-          <option value="">All Category Types</option>
-          {['Sightseeing', 'Food', 'Culture', 'Adventure', 'Leisure'].map((t) => (
+          <option value="">All Categories</option>
+          {['Adventure', 'Sightseeing', 'Food', 'Culture', 'Leisure'].map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}
         </select>
@@ -541,18 +561,26 @@ export default function ActivitySearch() {
                     {thrill.badge}
                   </span>
                 </div>
-                <div className="template-card-body" style={{ padding: '18px' }}>
-                  <div className="template-card-title-row" style={{ marginBottom: '6px' }}>
-                    <strong style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0f172a' }}>{act.name}</strong>
+                <div className="template-card-body" style={{ padding: '18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#2563eb', background: '#eff6ff', padding: '3px 8px', borderRadius: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                      📍 {act.cityName ? `${act.cityName}, ${act.cityCountry || ''}` : 'Top Experience'}
+                    </span>
                     <span className="activity-type-badge">{act.type}</span>
                   </div>
 
-                  <div className="activity-meta-line" style={{ margin: '6px 0 10px', fontSize: '0.85rem' }}>
-                    <span style={{ color: '#059669', fontWeight: 800 }}>{act.cost === 0 ? '✨ Free Entry' : `₹${act.cost}`}</span>
+                  <strong style={{ fontSize: '1.08rem', fontWeight: 800, color: '#0f172a', lineHeight: 1.3, marginBottom: '6px' }}>
+                    {act.name}
+                  </strong>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', fontSize: '0.82rem' }}>
+                    <span style={{ color: '#d97706', fontWeight: 800 }}>★ 4.9</span>
+                    <span style={{ color: '#64748b' }}>(1,200+ booked)</span>
+                    <span style={{ color: '#cbd5e1' }}>•</span>
                     <span style={{ color: '#64748b' }}>⏱ {act.duration} hr{act.duration > 1 ? 's' : ''}</span>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '6px', margin: '6px 0 10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '6px', margin: '4px 0 10px', flexWrap: 'wrap' }}>
                     <AudioGuideButton
                       placeName={act.name}
                       description={act.description}
@@ -567,24 +595,45 @@ export default function ActivitySearch() {
                     </button>
                   </div>
 
-                  <p className="activity-desc-line" style={{ fontSize: '0.88rem', color: '#475569', lineHeight: 1.5, margin: '6px 0 14px' }}>{act.description}</p>
+                  <p className="activity-desc-line" style={{ fontSize: '0.86rem', color: '#475569', lineHeight: 1.5, margin: '4px 0 12px' }}>
+                    {act.description}
+                  </p>
 
-                  <div className="template-card-footer" style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: 'auto' }}>
-                    <button
-                      className="link-button"
-                      onClick={() => setQuickViewActivity(act)}
-                      style={{ fontWeight: 700, fontSize: '0.84rem' }}
-                    >
-                      Quick View &rarr;
-                    </button>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px', fontSize: '0.76rem', color: '#059669', fontWeight: 700 }}>
+                    <span>✓ Free Cancellation</span>
+                    <span>•</span>
+                    <span>✓ Certified Guide</span>
+                    <span>•</span>
+                    <span>✓ Instant Confirmation</span>
+                  </div>
 
-                    <button
-                      className="btn btn-small btn-primary"
-                      onClick={() => openAddToTrip(act)}
-                      style={{ borderRadius: '16px', fontWeight: 800, padding: '6px 14px' }}
-                    >
-                      + Add to Trip
-                    </button>
+                  <div className="template-card-footer" style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px', marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div>
+                      <span style={{ fontSize: '0.72rem', color: '#64748b', display: 'block' }}>From</span>
+                      <strong style={{ fontSize: '1.15rem', color: '#0f172a', fontWeight: 900 }}>
+                        {act.cost === 0 ? 'Free Entry' : `₹${Number(act.cost).toLocaleString('en-IN')}`}
+                      </strong>
+                      <span style={{ fontSize: '0.72rem', color: '#64748b' }}> / person</span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button
+                        className="btn btn-small"
+                        onClick={() => setBookingActivityName(act.name)}
+                        style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)', color: 'white', border: 'none', borderRadius: '14px', fontWeight: 800, padding: '7px 12px', fontSize: '0.82rem', cursor: 'pointer' }}
+                        title="Instant Book Tour & Activity"
+                      >
+                        🎟️ Book Tour
+                      </button>
+                      <button
+                        className="btn btn-small btn-primary"
+                        onClick={() => openAddToTrip(act)}
+                        style={{ borderRadius: '14px', fontWeight: 800, padding: '7px 12px', fontSize: '0.82rem' }}
+                        title="Add to Itinerary"
+                      >
+                        + Trip
+                      </button>
+                    </div>
                   </div>
 
                   {addedItemsForAct.length > 0 && (
@@ -849,6 +898,14 @@ export default function ActivitySearch() {
       {/* 360 VR Landmark Preview Modal */}
       {selectedVRKey && (
         <LandmarkVRViewer landmarkKey={selectedVRKey} onClose={() => setSelectedVRKey(null)} />
+      )}
+
+      {/* Tour Booking Modal */}
+      {bookingActivityName && (
+        <TourBookingModal
+          destinationName={bookingActivityName}
+          onClose={() => setBookingActivityName(null)}
+        />
       )}
     </div>
   );
